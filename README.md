@@ -8,9 +8,9 @@ local SQLite database, so that you could have an offline backup of it, and actua
 
 Fast forward 10 years and I find myself wanting to do a full-text search on my long-abandoned LiveJournal. I dig up my password,
 log in, and it turns out that you STILL can't do it on the site without switching your journal to public and relying on
-Google or whatever garbage they've integrated with the site, which is insane. LiveJournal could have been one of the major
+Google or whatever garbage they've integrated with, which is insane. LiveJournal could have been one of the major
 social networks if they'd spent the past 10 years innovating instead of doing... whatever they've been doing. Instead I now
-have to rely on the Tumblr and all the features it doesn't have if I the urge to be an emo teenager.
+have to rely on Tumblr and all the features it doesn't have if I the urge to be an emo teenager.
 
 Anyway, given that Mozilla have abandoned XUL (and Deepest Sender stopped working properly ages ago) and I'm trying to rekindle
 my love of coding, I started working on this - a Node.js app that'll let you download your LiveJournal and save it to a SQLite
@@ -66,4 +66,3 @@ A big thanks to Robert Strong and Jed Brown for their help on Deepest Sender all
 [ljArchive](http://ljarchive.sourceforge.net/), because the source code to that was immensely helpful when I was trying to
 figure out where I was going wrong with syncing 10 years ago. And thanks to all the Deepest Sender users, my LJ friends and
 everyone that made LiveJournal so awesome back in the early 2000s.
-
