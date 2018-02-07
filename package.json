@@ -2,7 +2,7 @@
   "name": "exportlj",
   "version": "1.0.0",
   "description": "Export a LiveJournal to an SQLite database file.",
-  "main": "index.js",
+  "main": "exportlj.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
