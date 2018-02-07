@@ -1,5 +1,5 @@
 # exportlj
-Exports a LiveJournal to an SQLite database using Node.js
+Exports a LiveJournal to a SQLite database using Node.js
 
 A long long time ago, I wrote a LiveJournal client called Deepest Sender. It was done in XUL for Mozilla/Netscape 6 and later
 Phoenix/Firebird/Firefox and it ended up being pretty popular. One of the last things I worked on before it was abandoned
