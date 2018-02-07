@@ -10,7 +10,7 @@ Fast forward 10 years and I find myself wanting to do a full-text search on my l
 log in, and it turns out that you STILL can't do it on the site without switching your journal to public and relying on
 Google or whatever garbage they've integrated with, which is insane. LiveJournal could have been one of the major
 social networks if they'd spent the past 10 years innovating instead of doing... whatever they've been doing. Instead I now
-have to rely on Tumblr and all the features it doesn't have if I the urge to be an emo teenager.
+have to rely on Tumblr and all the features it doesn't have if I get the urge to be an emo teenager.
 
 Anyway, given that Mozilla have abandoned XUL (and Deepest Sender stopped working properly ages ago) and I'm trying to rekindle
 my love of coding, I started working on this - a Node.js app that'll let you download your LiveJournal and save it to a SQLite
