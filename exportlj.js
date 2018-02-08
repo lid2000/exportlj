@@ -2,9 +2,10 @@ const sqlite = require("sqlite3").verbose();
 
 const ljReq = require("./lib/livejournal");
 const syncItems = require("./lib/syncitems");
+const getComments = require("./lib/comments");
 const config = require('./config.json');
 
-const {url, username, password} = config;
+const {username} = config;
 
 // a lot of this is done with callbacks because the database runs async, as does all the requests to the lj server.
 //	yeah, annoying.
@@ -12,27 +13,34 @@ const {url, username, password} = config;
 const db = new sqlite.Database(username + ".sqlite3");
 db.serialize(function() {
 	// set up the database
-	db.run("CREATE TABLE IF NOT EXISTS `propmap` ( `id` INTEGER NOT NULL, `propname` NVARCHAR NOT NULL, PRIMARY KEY(`id`))");
-	db.run("CREATE TABLE IF NOT EXISTS `props` ( `itemid` INTEGER NOT NULL, `propid` INTEGER NOT NULL, `value` NVARCHAR NOT NULL)");
-	db.run("CREATE TABLE IF NOT EXISTS `general`( `lastsync` INTEGER)");
-	db.get("SELECT * FROM `general`", {}, function(err, res) {
-		if (!res) db.run("INSERT INTO `general` (`lastsync`) VALUES (0)");
+	db.run("create table if not exists `commenters` ( `id` integer not null unique, `username` text not null, primary key(`id`) )");
+	db.run("create table if not exists `comments` ( `id` integer not null, `userid` integer not null, `entryid` integer not null, `parentid` integer not null, `date` integer not null, `subject` text not null, `comment` text not null )");
+	db.run("create table if not exists `props` ( `id` integer not null, `propname` text not null, primary key(`id`))");
+	db.run("create table if not exists `propmap` ( `entryid` integer not null, `propid` integer not null, `value` text not null)");
+	db.run("create table if not exists `general`( `lastsync` integer not null)");
+	db.get("select * from `general`", {}, function(err, res) {
+		if (!res) db.run("insert into `general` (`lastsync`) values (0)");
 	});
-	db.run("CREATE TABLE IF NOT EXISTS `entries` ( `id` INTEGER NOT NULL, `subject` NVARCHAR, `event` TEXT NOT NULL, `time` INTEGER NOT NULL, `security` NVARCHAR NOT NULL, `allowmask` INTEGER, `anum` INTEGER NOT NULL, `url`	NVARCHAR NOT NULL, `poster` NVARCHAR, PRIMARY KEY(`id`))");
-	db.run("CREATE UNIQUE INDEX IF NOT EXISTS `id` ON `props` (`itemid`, `propid`)");
+	db.run("create table if not exists `entries` ( `id` integer not null, `subject` text, `event` text not null, `time` integer not null, `security` text not null, `allowmask` integer, `anum` integer not null, `url`	text not null, `poster` text, primary key(`id`))");
+	db.run("create unique index if not exists `id` on `propmap` (`entryid`, `propid`)");
 });
 
-db.get("SELECT `lastsync` FROM `general`", {}, function(err, obj) {
+db.get("select `lastsync` from `general`", {}, function(err, obj) {
 	// we have our lastsync value, so let's get started
 	exportLJ(obj ? obj['lastsync'] : 0);
 });
 
 const exportLJ = function(lastsync) {
-	const lj = new ljReq(url, username, password);
+	const lj = new ljReq();
 	lj.send({mode: "login", getmoods: 0, getpickws: 1, getpickwurls: 1}, function(data) {
 		// login was successful, so let's start syncing
 		// TODO: save moods, pics etc somewhere
 		const sync = new syncItems(db, lastsync);
 		sync.sync();
+		db.get("select max(`id`) as maxid from comments", {}, function(err, obj) {
+			const maxid = obj ? obj['maxid'] : 0;
+			const comments = new getComments(db, maxid);
+			comments.download();
+		});
 	});
 }
