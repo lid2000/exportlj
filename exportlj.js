@@ -15,7 +15,7 @@ db.serialize(function() {
 	// set up the database
 	db.run("create table if not exists `commenters` ( `id` integer not null unique, `username` text not null, primary key(`id`) )");
 	db.run("create table if not exists `comments` ( `id` integer not null, `userid` integer not null, `entryid` integer not null, `parentid` integer not null, `date` integer not null, `subject` text not null, `comment` text not null )");
-	db.run("create table if not exists `props` ( `id` integer not null, `propname` text not null, primary key(`id`))");
+	db.run("create table if not exists `props` ( `id` integer not null, `name` text not null, primary key(`id`))");
 	db.run("create table if not exists `propmap` ( `entryid` integer not null, `propid` integer not null, `value` text not null)");
 	db.run("create table if not exists `general`( `lastsync` integer not null)");
 	db.get("select * from `general`", {}, function(err, res) {
