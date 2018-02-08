@@ -78,7 +78,7 @@ Field | Type | Description
 ------|------|------------
 id | integer | Comment ID
 userid | integer | The commenter's user ID. Join it to the `commenters` table to find their username.
-entryid | integer | The entry/post ID that this comment applies to. Join it to the entries table.
+entryid | integer | The entry/post ID that this comment applies to. Join it to the `entries` table.
 parentid | integer | If this comment was a reply to another comment, then this will be the ID of the comment it's replying to. If it's zero, then it's a top-level comment.
 date | integer | UNIX timestamp of the date the comment was left.
 subject | text | Comment subject (if any).
