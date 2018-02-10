@@ -106,22 +106,14 @@ Field | Type | Description
 ------|------|------------
 lastsync | integer | UNIX timestamp of the highest sync time value returned the last time exportlj was run. Used so it doesn't keep redownloading your entire journal, only new/changed stuff.
 
-### propmap
+### props
 All the extra metadata attached with an entry. Moods, tags, music, you name it.
 
 Field | Type | Description
 ------|------|------------
 entryid | integer | Entry ID that this prop applies to. Join the `entries` table.
-propid | integer | ID of the prop that this applies to. Join to the `props` table.
+name | text | Name of the prop. Originally I used to have this in a separate table but got a tonne of drama getting the last insert ID from SQLite, so I gave up and now it's just directly in the table. Less efficient, but easier code.
 value | text | The value of whatever the prop was.
-
-### props
-Names of props.
-
-Field | Type | Description
-------|------|------------
-id | integer | Prop ID. Join it to the `propmap` table.
-name | text | Prop name.
 
 ## Thanks
 A big thanks to Robert Strong and Jed Brown for their help on Deepest Sender all those years ago, as well as whoever wrote
