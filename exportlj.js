@@ -14,8 +14,9 @@ const {username} = config;
 const db = new sqlite.Database(username + ".sqlite3");
 db.serialize(function() {
 	// set up the database
-	db.run("pragma synchronous = off");
-	db.run("pragma journal_mode = memory");
+	// below options seem to lose data
+	//db.run("pragma synchronous = off");
+	//db.run("pragma journal_mode = memory");
 	db.run("create table if not exists `commenters` ( `id` integer not null unique, `username` text not null, primary key(`id`) )");
 	db.run("create table if not exists `comments` ( `id` integer not null, `userid` integer not null, `entryid` integer not null, `parentid` integer not null, `date` integer not null, `subject` text not null, `comment` text not null, primary key (`id`) )");
 	db.run("create table if not exists `props` ( `entryid` integer not null, `name` text not null, `value` text not null)");

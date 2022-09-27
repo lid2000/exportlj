@@ -15,14 +15,14 @@ have to rely on Tumblr and all the features it doesn't have if I get the urge to
 Anyway, given that Mozilla have abandoned XUL (and Deepest Sender stopped working properly ages ago) and I'm trying to rekindle
 my love of coding, I started working on this - a Node.js app that'll let you download your LiveJournal and save it to a SQLite
 database. It's up to you what you do with it from there, but there's heaps of utilities that can read SQLite files, such as
-[DB Browser for SQLite](http://sqlitebrowser.org/). Hopefully one day someone who isn't me will come up with a cool LJ-specific
-interface for reading it.
+[DB Browser for SQLite](http://sqlitebrowser.org/) or [SQLiteStudio](https://sqlitestudio.pl/). Hopefully one day someone who
+isn't me will come up with a cool LJ-specific interface for reading it.
 
 At the moment all exportlj does is export entries and comments - I'm still working on getting all the extra metadata and shared
 journals working.
 
 ## Installation
-Make sure you've got a recent version of Node installed. I'm using 8.7.0 at the time of writing. Then check out this repository,
+Make sure you've got a recent version of Node installed. I'm using 16 at the time of writing. Then check out this repository,
 and run
 ```
 npm install
@@ -57,8 +57,8 @@ Every subsequent execution will sync items that have changed since you last did 
 people using LiveJournal, you can keep your journal up to date without having to wait for the entire thing to download each time.
 
 ## To Do
-* Save entry props
 * Get shared journals working (although I suspect you can only download your own posts from them)
+* Save other bits and pieces of metadata
 
 ## Database Schema
 Here's a description of the tables that are created within the database:
@@ -114,6 +114,23 @@ Field | Type | Description
 entryid | integer | Entry ID that this prop applies to. Join the `entries` table.
 name | text | Name of the prop. Originally I used to have this in a separate table but got a tonne of drama getting the last insert ID from SQLite, so I gave up and now it's just directly in the table. Less efficient, but easier code.
 value | text | The value of whatever the prop was.
+
+### moods
+This is a list of all the moods LJ has upon login. Each time you run exportlj it'll just replace them all with what the server has.
+
+Field | Type | Description
+id | integer | The LJ mood ID. If your entry has a prop called `current_moodid` you can look it up here to find out what it's meant to say.
+parent | integer | The parent LJ mood ID of this mood. I suppose this is so you can have a tree of moods? I've never actually used it.
+name | text | The actual mood name. `happy`, `sad`, `depressed` etc.
+
+### userpics
+A list of user pic keywords and their URLs. Note that there will always be an entry in here called `__default_pic__` which is your default
+user pic.
+
+Field | Type | Description
+name | text | This is the user pic keyword. Entries will have a prop called `picture_keyword` - you should be able to join on this.
+url | text | URL of the user pic.
+
 
 ## Thanks
 A big thanks to Robert Strong and Jed Brown for their help on Deepest Sender all those years ago, as well as whoever wrote
