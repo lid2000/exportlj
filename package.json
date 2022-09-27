@@ -1,19 +1,20 @@
 {
   "name": "exportlj",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Export a LiveJournal to an SQLite database file.",
   "main": "exportlj.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "David Murray",
+	"type": "module",
   "license": "ISC",
   "devDependencies": {
     "decode-uri-component": "^0.2.0",
-    "md5": "^2.2.1",
-    "moment": "^2.20.1",
+    "md5": "^2.3.0",
+    "moment": "^2.29.4",
     "pixl-xml": "^1.0.13",
     "request": "^2.83.0",
-    "sqlite3": "^3.1.13"
+    "sqlite3": "^5.1.1"
   }
 }
