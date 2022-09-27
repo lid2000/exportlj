@@ -1,20 +1,22 @@
 {
-  "name": "exportlj",
-  "version": "1.1.0",
-  "description": "Export a LiveJournal to an SQLite database file.",
-  "main": "exportlj.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "David Murray",
+	"name": "exportlj",
+	"version": "1.1.0",
+	"description": "Export a LiveJournal to an SQLite database file.",
+	"main": "exportlj.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"cleanup": "npx prettier --write .",
+	},
+	"author": "David Murray",
 	"type": "module",
-  "license": "ISC",
-  "devDependencies": {
-    "decode-uri-component": "^0.2.0",
-    "md5": "^2.3.0",
-    "moment": "^2.29.4",
-    "pixl-xml": "^1.0.13",
-    "request": "^2.83.0",
-    "sqlite3": "^5.1.1"
-  }
+	"license": "ISC",
+	"devDependencies": {
+		"decode-uri-component": "^0.2.0",
+		"md5": "^2.3.0",
+		"moment": "^2.29.4",
+		"pixl-xml": "^1.0.13",
+		"prettier": "^2.7.1",
+		"request": "^2.83.0",
+		"sqlite3": "^5.1.1"
+	}
 }
