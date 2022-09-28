@@ -11,12 +11,13 @@ const {username} = config;
 // a lot of this is done with callbacks because the database runs async, as does all the requests to the lj server.
 //	yeah, annoying.
 
+sqlite.verbose();
 const db = new sqlite.Database(username + ".sqlite3");
 db.serialize(function () {
 	// set up the database
 	// below options seem to lose data
-	//db.run("pragma synchronous = off");
-	//db.run("pragma journal_mode = memory");
+	db.run("pragma synchronous = off");
+	db.run("pragma journal_mode = memory");
 	db.run(
 		"create table if not exists `commenters` ( `id` integer not null unique, `username` text not null, primary key(`id`) )"
 	);
@@ -26,9 +27,9 @@ db.serialize(function () {
 	db.run(
 		"create table if not exists `props` ( `entryid` integer not null, `name` text not null, `value` text not null)"
 	);
-	db.run("create table if not exists `general`( `lastsync` integer not null)");
-	db.get("select * from `general`", {}, function (err, res) {
-		if (!res) db.run("insert into `general` (`lastsync`) values (0)");
+	db.run("create table if not exists `options` (`name` text not null, `value` text not null, primary key (`name`))");
+	db.get("select `value` from `options` where `name` = 'lastsync'", {}, function (err, res) {
+		if (!res) db.run("insert into `options` (`name`, `value`) values ('lastsync', 0)");
 	});
 	db.run(
 		"create table if not exists `entries` ( `id` integer not null, `subject` text, `event` text not null, `time` integer not null, `security` text not null, `allowmask` integer, `anum` integer not null, `url`	text not null, `poster` text, primary key(`id`))"
@@ -41,13 +42,13 @@ db.serialize(function () {
 		"create table if not exists `userpics` (`name` text not null, `url` text not null, primary key(`name`))"
 	);
 	db.run(
-		"create unique index if not exists `propindex` on `props` (`entryid`, `name`)"
+		"create index if not exists `propindex` on `props` (`entryid`)"
 	);
 });
 
-db.get("select `lastsync` from `general`", {}, function (err, obj) {
+db.get("select `value` from `options` where `name` = 'lastsync'", {}, function (err, obj) {
 	// we have our lastsync value, so let's get started
-	exportLJ(obj ? obj["lastsync"] : 0);
+	exportLJ(obj ? obj["value"] * 1 : 0);
 });
 
 const exportLJ = function (lastsync) {
@@ -57,6 +58,7 @@ const exportLJ = function (lastsync) {
 		function (data) {
 			// login was successful, so let's start syncing
 			// do moods
+			db.run("insert or replace into options (name, value) values ('name', :name)", makeParams({name: data['name']}));
 			const addMood = db.prepare(
 				"insert or replace into moods (id, parent, name) values (:id, :parent, :name)"
 			);

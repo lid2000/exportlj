@@ -1,6 +1,6 @@
 # exportlj
 
-Exports a LiveJournal to a SQLite database using Node.js
+## Exports a LiveJournal to a SQLite database using Node.js
 
 A long long time ago, I wrote a LiveJournal client called Deepest Sender. It was done in XUL for Mozilla/Netscape 6 and later
 Phoenix/Firebird/Firefox and it ended up being pretty popular. One of the last things I worked on before it was abandoned
@@ -38,11 +38,11 @@ You're all set up.
 First up, you need to set up a `config.json` file. This is pretty basic for now. You can see `config.sample.json` for an example
 of how it should look, or you can look at this:
 
-```
+```json
 {
-  "username": "yourusername",
-  "password": "yourpassword",
-  "url": "yourljserver"
+	"username": "yourusername",
+	"password": "yourpassword",
+	"url": "yourljserver"
 }
 ```
 
@@ -100,25 +100,28 @@ Every comment ever written on an entry.
 
 All your LiveJournal entries.
 
-| Field     | Type    | Description                                                                                                                                                                |
-| --------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| id        | integer | Entry ID.                                                                                                                                                                  |
-| subject   | text    | Entry subject (can be blank).                                                                                                                                              |
-| event     | text    | The entry content itself.                                                                                                                                                  |
-| time      | integer | UNIX timestamp of the date of the post.                                                                                                                                    |
-| security  | text    | It'll be either `blank` (public post), `private` (private post) or `usemask` (friend-only or other groups).                                                                |
-| allowmask | integer | Zero if unused. If it's 1, this means friends-only. If it's another value, you get to do some bitshifting to figure out which friends groups are allowed to see the entry. |
-| anum      | integer | Not gonna lie, I have no idea what this is supposed to be. LJ returns it as part of the API though.                                                                        |
-| url       | text    | URL of where this entry exists at.                                                                                                                                         |
-| poster    | integer | I'm hoping that if I can get shared journals working, this would be the ID of the poster. At the moment it'll always be blank.                                             |
+| Field     | Type    | Description                                                                                                                                                                                                |
+| --------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id        | integer | Entry ID.                                                                                                                                                                                                  |
+| subject   | text    | Entry subject (can be blank).                                                                                                                                                                              |
+| event     | text    | The entry content itself.                                                                                                                                                                                  |
+| time      | integer | UNIX timestamp of the date of the post.                                                                                                                                                                    |
+| security  | text    | It'll be either `blank` (public post), `private` (private post) or `usemask` (friend-only or other groups).                                                                                                |
+| allowmask | integer | Zero if unused. If it's 1, this means friends-only. If it's another value, you get to do some bitshifting to figure out which friends groups are allowed to see the entry.                                 |
+| anum      | integer | Not gonna lie, I have no idea what this is supposed to be. LJ returns it as part of the API though. You can generate URLs from it but the documentation says not to, and to rely on the URL field instead. |
+| url       | text    | URL of where this entry exists at.                                                                                                                                                                         |
+| poster    | integer | I'm hoping that if I can get shared journals working, this would be the ID of the poster. At the moment it'll always be blank.                                                                             |
 
-### general
+### options
 
-Values needed for exportlj to work
+Values needed for exportlj to work.
 
-| Field    | Type    | Description                                                                                                                                                               |
-| -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| lastsync | integer | UNIX timestamp of the highest sync time value returned the last time exportlj was run. Used so it doesn't keep redownloading your entire journal, only new/changed stuff. |
+| Field | Type | Description                                                           |
+| ----- | ---- | --------------------------------------------------------------------- |
+| name  | text | Name of the option, could be something like `lastsync` or `name` etc. |
+| value | text | Value of the option.                                                  |
+
+**Note on the `lastsync` option**: `lastsync` is a UNIX timestamp of the highest sync time value returned the last time exportlj was run. Used so it doesn't keep redownloading your entire journal, only new/changed stuff.
 
 ### props
 
@@ -134,19 +137,21 @@ All the extra metadata attached with an entry. Moods, tags, music, you name it.
 
 This is a list of all the moods LJ has upon login. Each time you run exportlj it'll just replace them all with what the server has.
 
-Field | Type | Description
-id | integer | The LJ mood ID. If your entry has a prop called `current_moodid` you can look it up here to find out what it's meant to say.
-parent | integer | The parent LJ mood ID of this mood. I suppose this is so you can have a tree of moods? I've never actually used it.
-name | text | The actual mood name. `happy`, `sad`, `depressed` etc.
+| Field  | Type    | Description                                                                                                                  |
+| ------ | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| id     | integer | The LJ mood ID. If your entry has a prop called `current_moodid` you can look it up here to find out what it's meant to say. |
+| parent | integer | The parent LJ mood ID of this mood. I suppose this is so you can have a tree of moods? I've never actually used it.          |
+| name   | text    | The actual mood name. `happy`, `sad`, `depressed` etc.                                                                       |
 
 ### userpics
 
 A list of user pic keywords and their URLs. Note that there will always be an entry in here called `__default_pic__` which is your default
 user pic.
 
-Field | Type | Description
-name | text | This is the user pic keyword. Entries will have a prop called `picture_keyword` - you should be able to join on this.
-url | text | URL of the user pic.
+| Field | Type | Description                                                                                                           |
+| ----- | ---- | --------------------------------------------------------------------------------------------------------------------- |
+| name  | text | This is the user pic keyword. Entries will have a prop called `picture_keyword` - you should be able to join on this. |
+| url   | text | URL of the user pic.                                                                                                  |
 
 ## Thanks
 
