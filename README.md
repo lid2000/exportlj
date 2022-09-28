@@ -148,10 +148,10 @@ This is a list of all the moods LJ has upon login. Each time you run exportlj it
 A list of user pic keywords and their URLs. Note that there will always be an entry in here called `__default_pic__` which is your default
 user pic.
 
-| Field | Type | Description                                                                                                           |
-| ----- | ---- | --------------------------------------------------------------------------------------------------------------------- |
-| name  | text | This is the user pic keyword. Entries will have a prop called `picture_keyword` - you should be able to join on this. |
-| url   | text | URL of the user pic.                                                                                                  |
+| Field | Type | Description                                                                                                                                                                     |
+| ----- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name  | text | This is the user pic keyword. Entries ~~will~~ **should** have a prop called `picture_keyword` (LJ seems to have stopped returning them?) - you should be able to join on this. |
+| url   | text | URL of the user pic.                                                                                                                                                            |
 
 ## Thanks
 
